@@ -11,38 +11,30 @@
 
 int main()
 {
-    std::set < std::vector <unsigned int>> vSet;
     const unsigned int MaxSum = 25;
-    unsigned int AntX{ 1000 }, AntY{ 1000 }, counter{ 0 };
+    unsigned int AntX{ 1000 }, AntY{ 1000 }; 
+    std::vector <std::vector <unsigned int>> Coord{ {AntX, AntY} };
+    std::set < std::vector <unsigned int>> vCoord{ {AntX, AntY} };
     
-    //all available Y with sequential order of X;
-    for (unsigned int i = 1000; i <= MaxCoordinate(AntX, AntY, MaxSum); i++)
+    while (!Coord.empty())
     {
-        while (counter <= MaxSum)
+        //Y++
+        if ((Summ(Coord.front().at(0), Coord.front().at(1) + 1) <= MaxSum) && (vCoord.find({ Coord.front().at(0), Coord.front().at(1) + 1 }) == vCoord.end()))
         {
-            vSet.insert({ i, AntY });
-            AntY++;
-            counter = Summ(i, AntY);
+            vCoord.insert({ Coord.front().at(0), Coord.front().at(1) + 1 });
+            Coord.push_back({ Coord.front().at(0), Coord.front().at(1) + 1 });
         }
-        counter = 0;
-        AntY = 1000;
-    }
-    
-    //all available X with sequential order of Y;
-    for (unsigned int i = 1000; i <= MaxCoordinate(AntY, AntX, MaxSum); i++)
-    {
-        while (counter <= MaxSum)
+        //X++
+        if ((Summ(Coord.front().at(0) + 1, Coord.front().at(1)) <= MaxSum) && (vCoord.find({ Coord.front().at(0) + 1, Coord.front().at(1) }) == vCoord.end()))
         {
-            vSet.insert({ AntX, i });
-            AntX++;
-            counter = Summ(AntX, i);
+            vCoord.insert({ Coord.front().at(0) + 1, Coord.front().at(1) });
+            Coord.push_back({ Coord.front().at(0) + 1, Coord.front().at(1) });
         }
-        counter = 0;
-        AntX = 1000;
+        Coord.erase(Coord.begin());
     }
     
     //result;
-    std::cout << "Number of coordinates: " << vSet.size() << std::endl;
+    std::cout << "Number of coordinates: " << vCoord.size() << std::endl;
 
 }
 
